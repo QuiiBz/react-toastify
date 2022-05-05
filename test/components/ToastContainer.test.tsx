@@ -137,6 +137,26 @@ describe('ToastContainer', () => {
     expect(screen.getByText('bar')).not.toBe(null);
   });
 
+  it('Should be able to specify a custom icon', () => {
+    render(<ToastContainer />);
+    act(() => {
+      toast('string', {
+        icon: "🚀",
+      });
+      toast('component', {
+        icon: () => <p>content</p>,
+      });
+      toast('disable', {
+        icon: false,
+      });
+      jest.runAllTimers();
+    });
+
+    expect(screen.getByText('string').parentElement.getElementsByClassName('Toastify__toast-icon')[0].textContent).toEqual("🚀");
+    expect(screen.getByText('component').parentElement.getElementsByClassName('Toastify__toast-icon')[0].textContent).toEqual("content");
+    expect(screen.getByText('disable').parentElement.getElementsByClassName('Toastify__toast-icon').length).toEqual(0);
+  });
+
   it('Should be able to display new toast on top', () => {
     render(<ToastContainer newestOnTop />);
     const toastValues = ['t 1', 't 2', 't 3'];

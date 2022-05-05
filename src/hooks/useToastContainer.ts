@@ -215,16 +215,17 @@ export function useToastContainer(props: ToastContainerProps) {
 
     const maybeIcon = Icons[toastProps.type as keyof typeof Icons];
     const iconProps = { theme: toastProps.theme, type: toastProps.type };
+    const savedIcon = toastProps.icon;
     toastProps.icon = maybeIcon && maybeIcon(iconProps);
 
-    if (toastProps.icon === false) {
+    if (savedIcon === false) {
       toastProps.icon = void 0;
-    } else if (isFn(toastProps.icon)) {
-      toastProps.icon = toastProps.icon(iconProps);
-    } else if (isValidElement(toastProps.icon)) {
-      toastProps.icon = cloneElement(toastProps.icon, iconProps);
-    } else if (isStr(toastProps.icon)) {
-      toastProps.icon = toastProps.icon;
+    } else if (isFn(savedIcon)) {
+      toastProps.icon = savedIcon(iconProps);
+    } else if (isValidElement(savedIcon)) {
+      toastProps.icon = cloneElement(savedIcon, iconProps);
+    } else if (isStr(savedIcon)) {
+      toastProps.icon = savedIcon;
     } else if (toastProps.isLoading) {
       toastProps.icon = Icons.spinner();
     }
